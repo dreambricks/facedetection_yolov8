@@ -8,13 +8,13 @@ import numpy as np
 
 UDP_PORT = 5053
 
-CAM_INDEX = 0
+CAM_INDEX = 1
 USE_HIGHRES = False
 
 CAM_WIDTH = 1280 if USE_HIGHRES else 640
 CAM_HEIGHT = 720 if USE_HIGHRES else 360
 
-udp_sender = UDPSender(port=UDP_PORT)
+udp_sender = UDPSender(ip="192.168.20.1", port=UDP_PORT)
 
 ct = CentroidTracker(horizon=900, z_mult=30000)
 
@@ -33,9 +33,10 @@ cv2.namedWindow("Color frame")
 
 def run_using_yolo():
     model = YOLO("yolov8n-face.pt")
-    cap = cv2.VideoCapture(CAM_INDEX)
+    cap = cv2.VideoCapture(CAM_INDEX + cv2.CAP_DSHOW)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, CAM_WIDTH)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, CAM_HEIGHT)
+    cap.set(cv2.CAP_PROP_FPS, 60)
 
 
     global cam_state, chosen_id
